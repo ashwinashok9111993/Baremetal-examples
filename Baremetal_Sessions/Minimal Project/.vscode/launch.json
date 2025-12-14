@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Cortex Debug (Port 3333)",
+            "cwd": "${workspaceFolder}",
+            "executable": "./a.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "external",
+            "gdbTarget": "localhost:3333",
+            "gdbPath": "arm-none-eabi-gdb",
+            "runToEntryPoint": "reset_handler",
+            "device": "STM32F103C8",
+            "svdFile": "${env:HOME}/.vscode/extensions/marus25.cortex-debug-2.2.0/data/svd/STM32F103.svd"
+        }
+    ]
+}
