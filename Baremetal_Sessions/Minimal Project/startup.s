@@ -6,7 +6,7 @@
 .global vtable
 .global reset_handler
 
-.section .isr_vector
+.section .isr_vector,"a",%progbits
 .align 2
 vtable:
     .word _estack

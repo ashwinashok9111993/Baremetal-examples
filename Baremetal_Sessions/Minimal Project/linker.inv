@@ -1,6 +1,7 @@
 MEMORY
 {
-    FLASH ( rx )      : ORIGIN = 0x08000000, LENGTH = 64K
+    VECTORS ( rx )    : ORIGIN = 0x08000000, LENGTH = 8
+    FLASH ( rx )      : ORIGIN = 0x08000008, LENGTH = 64K - 8
     RAM ( rxw )       : ORIGIN = 0x20000000, LENGTH = 20K
 }
 
@@ -10,16 +11,12 @@ SECTIONS
 {
     .isr_vector :
     {
-        . = ALIGN(4);
         KEEP(*(.isr_vector))
-        . = ALIGN(4);
-    } > FLASH
+    } > VECTORS
 
     .text :
     {
-        . = ALIGN(4);
         *(.text)
         *(.text*)
-        . = ALIGN(4);
     } > FLASH
 }

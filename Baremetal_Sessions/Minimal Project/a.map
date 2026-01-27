@@ -4,60 +4,78 @@ There are no discarded input sections
 Memory Configuration
 
 Name             Origin             Length             Attributes
-FLASH            0x08000000         0x00010000         xr
+VECTORS          0x08000000         0x00000008         xr
+FLASH            0x08000008         0x0000fff8         xr
 RAM              0x20000000         0x00005000         xrw
 *default*        0x00000000         0xffffffff
 
 Linker script and memory map
 
-LOAD /tmp/ccFZ8U9o.o
+LOAD /tmp/ccTEIxIT.o
                 0x20005000                        _estack = (ORIGIN (RAM) + LENGTH (RAM))
 
 .isr_vector     0x08000000        0x8
-                0x08000000                        . = ALIGN (0x4)
  *(.isr_vector)
- .isr_vector    0x08000000        0x8 /tmp/ccFZ8U9o.o
+ .isr_vector    0x08000000        0x8 /tmp/ccTEIxIT.o
                 0x08000000                vtable
-                0x08000008                        . = ALIGN (0x4)
 
-.text           0x08000000       0x10
-                0x08000000                        . = ALIGN (0x4)
+.text           0x08000008       0x10
  *(.text)
- .text          0x08000000       0x10 /tmp/ccFZ8U9o.o
-                0x08000000                reset_handler
+ .text          0x08000008       0x10 /tmp/ccTEIxIT.o
+                0x08000008                reset_handler
  *(.text*)
-                0x08000010                        . = ALIGN (0x4)
 OUTPUT(a.elf elf32-littlearm)
 LOAD linker stubs
 
-.data           0x08000010        0x0
- .data          0x08000010        0x0 /tmp/ccFZ8U9o.o
+.data           0x08000018        0x0
+ .data          0x08000018        0x0 /tmp/ccTEIxIT.o
 
-.igot.plt       0x08000010        0x0
- .igot.plt      0x08000010        0x0 /tmp/ccFZ8U9o.o
+.igot.plt       0x08000018        0x0
+ .igot.plt      0x08000018        0x0 /tmp/ccTEIxIT.o
 
-.glue_7         0x08000010        0x0
- .glue_7        0x08000010        0x0 linker stubs
+.glue_7         0x08000018        0x0
+ .glue_7        0x08000018        0x0 linker stubs
 
-.glue_7t        0x08000010        0x0
- .glue_7t       0x08000010        0x0 linker stubs
+.glue_7t        0x08000018        0x0
+ .glue_7t       0x08000018        0x0 linker stubs
 
-.vfp11_veneer   0x08000010        0x0
- .vfp11_veneer  0x08000010        0x0 linker stubs
+.vfp11_veneer   0x08000018        0x0
+ .vfp11_veneer  0x08000018        0x0 linker stubs
 
-.v4_bx          0x08000010        0x0
- .v4_bx         0x08000010        0x0 linker stubs
+.v4_bx          0x08000018        0x0
+ .v4_bx         0x08000018        0x0 linker stubs
 
-.iplt           0x08000010        0x0
- .iplt          0x08000010        0x0 /tmp/ccFZ8U9o.o
+.iplt           0x08000018        0x0
+ .iplt          0x08000018        0x0 /tmp/ccTEIxIT.o
 
-.rel.dyn        0x08000010        0x0
- .rel.iplt      0x08000010        0x0 /tmp/ccFZ8U9o.o
+.rel.dyn        0x08000018        0x0
+ .rel.iplt      0x08000018        0x0 /tmp/ccTEIxIT.o
 
-.bss            0x08000010        0x0
- .bss           0x08000010        0x0 /tmp/ccFZ8U9o.o
+.bss            0x08000018        0x0
+ .bss           0x08000018        0x0 /tmp/ccTEIxIT.o
 
 .ARM.attributes
                 0x00000000       0x21
  .ARM.attributes
-                0x00000000       0x21 /tmp/ccFZ8U9o.o
+                0x00000000       0x21 /tmp/ccTEIxIT.o
+
+.debug_line     0x00000000       0x4d
+ .debug_line    0x00000000       0x4d /tmp/ccTEIxIT.o
+
+.debug_line_str
+                0x00000000       0x58
+ .debug_line_str
+                0x00000000       0x58 /tmp/ccTEIxIT.o
+
+.debug_info     0x00000000       0x24
+ .debug_info    0x00000000       0x24 /tmp/ccTEIxIT.o
+
+.debug_abbrev   0x00000000       0x14
+ .debug_abbrev  0x00000000       0x14 /tmp/ccTEIxIT.o
+
+.debug_aranges  0x00000000       0x20
+ .debug_aranges
+                0x00000000       0x20 /tmp/ccTEIxIT.o
+
+.debug_str      0x00000000       0x66
+ .debug_str     0x00000000       0x66 /tmp/ccTEIxIT.o
