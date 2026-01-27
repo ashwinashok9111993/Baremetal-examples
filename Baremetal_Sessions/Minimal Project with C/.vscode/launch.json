@@ -2,18 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Cortex Debug (CMSIS-DAP)",
+            "name": "Cortex Debug (ST-Link)",
             "cwd": "${workspaceFolder}",
             "executable": "./program.elf",
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "openocd",
             "configFiles": [
-                "interface/cmsis-dap.cfg",
+                "interface/stlink.cfg",
                 "target/stm32f1x.cfg"
             ],
             "openOCDPreConfigLaunchCommands": [
-                "set CPUTAPID 0x2ba01477"
+                "set CPUTAPID 0x1ba01477"
             ],
             "preLaunchCommands": [
                 "set mem inaccessible-by-default off"

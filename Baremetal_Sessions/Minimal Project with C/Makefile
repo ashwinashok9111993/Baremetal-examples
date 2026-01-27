@@ -26,9 +26,9 @@ LDFLAGS += -Wl,-Map=$(TARGET).map
 
 # OpenOCD configuration
 OPENOCD = openocd
-OPENOCD_INTERFACE = interface/cmsis-dap.cfg
+OPENOCD_INTERFACE = interface/stlink.cfg
 OPENOCD_TARGET = target/stm32f1x.cfg
-OPENOCD_EXTRA = -c "set CPUTAPID 0x2ba01477"
+OPENOCD_EXTRA = -c "set CPUTAPID 0x1ba01477"
 
 # Build rules
 all: $(TARGET).elf $(TARGET).bin

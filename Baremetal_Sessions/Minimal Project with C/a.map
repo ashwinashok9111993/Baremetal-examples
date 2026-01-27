@@ -1,0 +1,64 @@
+
+There are no discarded input sections
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00010000         xr
+RAM              0x20000000         0x00005000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /tmp/cc652QbB.o
+                0x20005000                        _estack = (ORIGIN (RAM) + LENGTH (RAM))
+
+.text           0x08000000       0x18
+ *(.isr_vector)
+ .isr_vector    0x08000000        0x8 /tmp/cc652QbB.o
+                0x08000000                vtable
+ *(.text)
+ .text          0x08000008       0x10 /tmp/cc652QbB.o
+                0x08000008                reset_handler
+ *(.text*)
+ *(.rodata)
+ *(.rodata*)
+
+.glue_7         0x08000018        0x0
+ .glue_7        0x08000018        0x0 linker stubs
+
+.glue_7t        0x08000018        0x0
+ .glue_7t       0x08000018        0x0 linker stubs
+
+.vfp11_veneer   0x08000018        0x0
+ .vfp11_veneer  0x08000018        0x0 linker stubs
+
+.v4_bx          0x08000018        0x0
+ .v4_bx         0x08000018        0x0 linker stubs
+
+.iplt           0x08000018        0x0
+ .iplt          0x08000018        0x0 /tmp/cc652QbB.o
+
+.rel.dyn        0x08000018        0x0
+ .rel.iplt      0x08000018        0x0 /tmp/cc652QbB.o
+
+.data           0x20000000        0x0 load address 0x08000018
+ *(.data)
+ .data          0x20000000        0x0 /tmp/cc652QbB.o
+ *(.data*)
+
+.igot.plt       0x20000000        0x0 load address 0x08000018
+ .igot.plt      0x20000000        0x0 /tmp/cc652QbB.o
+
+.bss            0x20000000        0x0 load address 0x08000018
+ *(.bss)
+ .bss           0x20000000        0x0 /tmp/cc652QbB.o
+ *(.bss*)
+ *(COMMON)
+OUTPUT(a.elf elf32-littlearm)
+LOAD linker stubs
+
+.ARM.attributes
+                0x00000000       0x21
+ .ARM.attributes
+                0x00000000       0x21 /tmp/cc652QbB.o
