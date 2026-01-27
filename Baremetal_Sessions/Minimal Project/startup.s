@@ -10,7 +10,7 @@
 .align 2
 vtable:
     .word _estack
-    .word reset_handler
+    .word reset_handler + 1
 
 .section .text
 .align 2
