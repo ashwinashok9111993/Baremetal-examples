@@ -10,7 +10,7 @@ RAM              0x20000000         0x00005000         xrw
 
 Linker script and memory map
 
-LOAD /tmp/ccGjqtOa.o
+LOAD /tmp/ccNjZpte.o
                 0x20005000                        _estack = (ORIGIN (RAM) + LENGTH (RAM))
 OUTPUT(a.elf elf32-littlearm)
 LOAD linker stubs
@@ -28,29 +28,29 @@ LOAD linker stubs
  .v4_bx         0x08000000        0x0 linker stubs
 
 .text           0x08000000       0x10
- .text          0x08000000       0x10 /tmp/ccGjqtOa.o
+ .text          0x08000000       0x10 /tmp/ccNjZpte.o
                 0x08000000                reset_handler
 
 .iplt           0x08000010        0x0
- .iplt          0x08000010        0x0 /tmp/ccGjqtOa.o
+ .iplt          0x08000010        0x0 /tmp/ccNjZpte.o
 
 .rel.dyn        0x08000010        0x0
- .rel.iplt      0x08000010        0x0 /tmp/ccGjqtOa.o
+ .rel.iplt      0x08000010        0x0 /tmp/ccNjZpte.o
 
 .data           0x20000000        0x0
- .data          0x20000000        0x0 /tmp/ccGjqtOa.o
+ .data          0x20000000        0x0 /tmp/ccNjZpte.o
 
 .igot.plt       0x20000000        0x0
- .igot.plt      0x20000000        0x0 /tmp/ccGjqtOa.o
+ .igot.plt      0x20000000        0x0 /tmp/ccNjZpte.o
 
 .bss            0x20000000        0x0
- .bss           0x20000000        0x0 /tmp/ccGjqtOa.o
+ .bss           0x20000000        0x0 /tmp/ccNjZpte.o
 
 .isr_vector     0x00000000        0x8
- .isr_vector    0x00000000        0x8 /tmp/ccGjqtOa.o
+ .isr_vector    0x00000000        0x8 /tmp/ccNjZpte.o
                 0x00000000                vtable
 
 .ARM.attributes
                 0x00000000       0x21
  .ARM.attributes
-                0x00000000       0x21 /tmp/ccGjqtOa.o
+                0x00000000       0x21 /tmp/ccNjZpte.o

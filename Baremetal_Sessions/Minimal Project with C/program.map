@@ -82,9 +82,9 @@ LOAD linker stubs
  .debug_line    0x00000049       0x72 main.o
 
 .debug_line_str
-                0x00000000       0x4a
+                0x00000000       0x5d
  .debug_line_str
-                0x00000000       0x4a startup.o
+                0x00000000       0x5d startup.o
 
 .debug_info     0x00000000       0x8d
  .debug_info    0x00000000       0x24 startup.o
@@ -100,10 +100,10 @@ LOAD linker stubs
  .debug_aranges
                 0x00000020       0x20 main.o
 
-.debug_str      0x00000000     0x2e5f
- .debug_str     0x00000000     0x2e5f startup.o
-                                 0x58 (size before relaxing)
- .debug_str     0x00002e5f        0x0 main.o
+.debug_str      0x00000000     0x2eb2
+ .debug_str     0x00000000     0x2eb2 startup.o
+                                 0x6b (size before relaxing)
+ .debug_str     0x00002eb2        0x0 main.o
                                0x2e47 (size before relaxing)
 
 .debug_macro    0x00000000      0xadd

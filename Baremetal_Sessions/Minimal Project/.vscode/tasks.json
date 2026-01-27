@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Flash Firmware",
+            "type": "shell",
+            "command": "openocd -f interface/stlink.cfg -f target/stm32f1x.cfg -c 'program a.elf verify reset exit'",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        }
+    ]
+}
