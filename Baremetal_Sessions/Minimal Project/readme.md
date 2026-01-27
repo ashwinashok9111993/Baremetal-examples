@@ -6,6 +6,9 @@ arm-none-eabi-gcc -x assembler-with-cpp -Og ./startup.s -mthumb -mcpu=cortex-m3 
 # OpenOCD Target
 '/home/ashwin/Desktop/OpenOCD_GNUTools/xpack-openocd-0.12.0-7/bin/openocd' -f '/home/ashwin/Desktop/OpenOCD_GNUTools/xpack-openocd-0.12.0-7/openocd/scripts/interface/stlink-v2.cfg' -f '/home/ashwin/Desktop/OpenOCD_GNUTools/xpack-openocd-0.12.0-7/openocd/scripts/target/stm32f1x.cfg'
 
+# flash
+'/home/ashwin/Desktop/OpenOCD_GNUTools/xpack-openocd-0.12.0-7/bin/openocd' -f '/home/ashwin/Desktop/OpenOCD_GNUTools/xpack-openocd-0.12.0-7/openocd/scripts/interface/stlink-v2.cfg' -f '/home/ashwin/Desktop/OpenOCD_GNUTools/xpack-openocd-0.12.0-7/openocd/scripts/target/stm32f1x.cfg' -c 'program a.elf verify reset exit'
+
 # launch.json
 {
     "version": "0.2.0",

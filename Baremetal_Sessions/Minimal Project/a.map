@@ -10,20 +10,20 @@ RAM              0x20000000         0x00005000         xrw
 
 Linker script and memory map
 
-LOAD /tmp/ccSXJn4K.o
+LOAD /tmp/ccFZ8U9o.o
                 0x20005000                        _estack = (ORIGIN (RAM) + LENGTH (RAM))
 
 .isr_vector     0x08000000        0x8
                 0x08000000                        . = ALIGN (0x4)
  *(.isr_vector)
- .isr_vector    0x08000000        0x8 /tmp/ccSXJn4K.o
+ .isr_vector    0x08000000        0x8 /tmp/ccFZ8U9o.o
                 0x08000000                vtable
                 0x08000008                        . = ALIGN (0x4)
 
 .text           0x08000000       0x10
                 0x08000000                        . = ALIGN (0x4)
  *(.text)
- .text          0x08000000       0x10 /tmp/ccSXJn4K.o
+ .text          0x08000000       0x10 /tmp/ccFZ8U9o.o
                 0x08000000                reset_handler
  *(.text*)
                 0x08000010                        . = ALIGN (0x4)
@@ -31,10 +31,10 @@ OUTPUT(a.elf elf32-littlearm)
 LOAD linker stubs
 
 .data           0x08000010        0x0
- .data          0x08000010        0x0 /tmp/ccSXJn4K.o
+ .data          0x08000010        0x0 /tmp/ccFZ8U9o.o
 
 .igot.plt       0x08000010        0x0
- .igot.plt      0x08000010        0x0 /tmp/ccSXJn4K.o
+ .igot.plt      0x08000010        0x0 /tmp/ccFZ8U9o.o
 
 .glue_7         0x08000010        0x0
  .glue_7        0x08000010        0x0 linker stubs
@@ -49,15 +49,15 @@ LOAD linker stubs
  .v4_bx         0x08000010        0x0 linker stubs
 
 .iplt           0x08000010        0x0
- .iplt          0x08000010        0x0 /tmp/ccSXJn4K.o
+ .iplt          0x08000010        0x0 /tmp/ccFZ8U9o.o
 
 .rel.dyn        0x08000010        0x0
- .rel.iplt      0x08000010        0x0 /tmp/ccSXJn4K.o
+ .rel.iplt      0x08000010        0x0 /tmp/ccFZ8U9o.o
 
 .bss            0x08000010        0x0
- .bss           0x08000010        0x0 /tmp/ccSXJn4K.o
+ .bss           0x08000010        0x0 /tmp/ccFZ8U9o.o
 
 .ARM.attributes
                 0x00000000       0x21
  .ARM.attributes
-                0x00000000       0x21 /tmp/ccSXJn4K.o
+                0x00000000       0x21 /tmp/ccFZ8U9o.o
