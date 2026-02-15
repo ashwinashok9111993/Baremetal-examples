@@ -1,0 +1,23 @@
+.syntax unified
+.cpu cortex-m3
+.fpu softvfp
+.thumb
+
+.global vtable
+.global reset_handler
+
+.section .isr_vector
+.align 2
+vtable:
+    .word _estack
+    .word reset_handler + 1
+
+.section .text
+.align 2
+reset_handler:
+    ldr r0, =_estack 
+    mov sp, r0
+    bl main
+    b .
+    .ltorg
+

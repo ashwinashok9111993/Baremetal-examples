@@ -1,0 +1,49 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Cortex Debug (ST-Link)",
+            "cwd": "${workspaceFolder}",
+            "executable": "./program.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "configFiles": [
+                "interface/stlink.cfg",
+                "target/stm32f1x.cfg"
+            ],
+            "openOCDPreConfigLaunchCommands": [
+                "set CPUTAPID 0x1ba01477"
+            ],
+            "preLaunchCommands": [
+                "set mem inaccessible-by-default off"
+            ],
+            "gdbPath": "arm-none-eabi-gdb",
+            "runToEntryPoint": "main",
+            "device": "STM32F103C8",
+            "svdFile": "${workspaceFolder}/STM32F103xx.svd",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            },
+            "showDevDebugOutput": "parsed"
+        },
+        {
+            "name": "Cortex Debug (External OpenOCD)",
+            "cwd": "${workspaceFolder}",
+            "executable": "./program.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "external",
+            "gdbTarget": "localhost:3333",
+            "gdbPath": "arm-none-eabi-gdb",
+            "runToEntryPoint": "main",
+            "device": "STM32F103C8",
+            "svdFile": "${workspaceFolder}/STM32F103xx.svd",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            }
+        }
+    ]
+}

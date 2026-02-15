@@ -1,0 +1,120 @@
+
+Discarded input sections
+
+ .group         0x00000000        0xc main.o
+ .group         0x00000000        0xc main.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00010000         xr
+RAM              0x20000000         0x00005000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD startup.o
+LOAD main.o
+                0x20005000                        _estack = (ORIGIN (RAM) + LENGTH (RAM))
+
+.text           0x08000000       0xf4
+ *(.isr_vector)
+ .isr_vector    0x08000000        0x8 startup.o
+                0x08000000                vtable
+ *(.text)
+ .text          0x08000008       0x10 startup.o
+                0x08000008                reset_handler
+ .text          0x08000018       0xdc main.o
+                0x0800009e                main
+ *(.text*)
+ *(.rodata)
+ *(.rodata*)
+
+.glue_7         0x080000f4        0x0
+ .glue_7        0x080000f4        0x0 linker stubs
+
+.glue_7t        0x080000f4        0x0
+ .glue_7t       0x080000f4        0x0 linker stubs
+
+.vfp11_veneer   0x080000f4        0x0
+ .vfp11_veneer  0x080000f4        0x0 linker stubs
+
+.v4_bx          0x080000f4        0x0
+ .v4_bx         0x080000f4        0x0 linker stubs
+
+.iplt           0x080000f4        0x0
+ .iplt          0x080000f4        0x0 startup.o
+
+.rel.dyn        0x080000f4        0x0
+ .rel.iplt      0x080000f4        0x0 startup.o
+
+.data           0x20000000        0x0 load address 0x080000f4
+ *(.data)
+ .data          0x20000000        0x0 startup.o
+ .data          0x20000000        0x0 main.o
+ *(.data*)
+
+.igot.plt       0x20000000        0x0 load address 0x080000f4
+ .igot.plt      0x20000000        0x0 startup.o
+
+.bss            0x20000000        0x0 load address 0x080000f4
+ *(.bss)
+ .bss           0x20000000        0x0 startup.o
+ .bss           0x20000000        0x0 main.o
+ *(.bss*)
+ *(COMMON)
+OUTPUT(program.elf elf32-littlearm)
+LOAD linker stubs
+
+.ARM.attributes
+                0x00000000       0x2f
+ .ARM.attributes
+                0x00000000       0x21 startup.o
+ .ARM.attributes
+                0x00000021       0x2d main.o
+
+.comment        0x00000000       0x43
+ .comment       0x00000000       0x43 main.o
+                                 0x44 (size before relaxing)
+
+.debug_line     0x00000000      0x1a7
+ .debug_line    0x00000000       0x49 startup.o
+ .debug_line    0x00000049      0x15e main.o
+
+.debug_line_str
+                0x00000000       0x5d
+ .debug_line_str
+                0x00000000       0x5d startup.o
+
+.debug_info     0x00000000      0x33f
+ .debug_info    0x00000000       0x24 startup.o
+ .debug_info    0x00000024      0x31b main.o
+
+.debug_abbrev   0x00000000      0x1e3
+ .debug_abbrev  0x00000000       0x14 startup.o
+ .debug_abbrev  0x00000014      0x1cf main.o
+
+.debug_aranges  0x00000000       0x40
+ .debug_aranges
+                0x00000000       0x20 startup.o
+ .debug_aranges
+                0x00000020       0x20 main.o
+
+.debug_str      0x00000000     0x3245
+ .debug_str     0x00000000     0x3245 startup.o
+                                 0x6b (size before relaxing)
+ .debug_str     0x00003245        0x0 main.o
+                               0x3211 (size before relaxing)
+
+.debug_loclists
+                0x00000000      0x1cf
+ .debug_loclists
+                0x00000000      0x1cf main.o
+
+.debug_macro    0x00000000      0xb5c
+ .debug_macro   0x00000000       0x1a main.o
+ .debug_macro   0x0000001a      0xaba main.o
+ .debug_macro   0x00000ad4       0x88 main.o
+
+.debug_frame    0x00000000       0x64
+ .debug_frame   0x00000000       0x64 main.o

@@ -1,0 +1,2050 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass extarticle
+\begin_preamble
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{minted}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    breaklines=true
+}
+
+
+% Define ARM Cortex-M colors
+\definecolor{armblue}{RGB}{0,82,147}
+\definecolor{armgreen}{RGB}{0,128,0}
+\definecolor{armred}{RGB}{200,0,0}
+\definecolor{armpurple}{RGB}{128,0,128}
+\definecolor{armgray}{RGB}{100,100,100}
+\definecolor{armcomment}{RGB}{0,128,128}
+\definecolor{armbackground}{RGB}{248,248,248}
+\definecolor{armframecolor}{RGB}{200,200,200}
+
+% STM32 Assembly language definition
+\lstdefinelanguage{STM32Assembly}{
+  % Instructions
+  morekeywords=[1]{%
+    % Data Processing
+    ADD,ADC,SUB,SBC,RSB,RSC,AND,ORR,EOR,BIC,
+    % Move
+    MOV,MVN,
+    % Compare
+    CMP,CMN,TST,TEQ,
+    % Multiply
+    MUL,MLA,MLS,UMULL,UMLAL,SMULL,SMLAL,
+    % Load/Store
+    LDR,STR,LDRB,STRB,LDRH,STRH,LDRSB,LDRSH,
+    LDM,STM,PUSH,POP,
+    % Branch
+    B,BL,BX,BLX,
+    % Miscellaneous
+    NOP,SVC,WFI,WFE,SEV,ISB,DSB,DMB,
+    % Thumb-2
+    CBZ,CBNZ,IT,ITT,ITE,ITTEE,
+    % Floating Point (if Cortex-M4F/M7)
+    VADD,VMUL,VSUB,VDIV,VCMP,VMOV,VLDR,VSTR,
+    % System Control
+    MRS,MSR,CPSID,CPSIE,
+    % Exclusive access
+    LDREX,STREX,CLREX,
+    % Saturation
+    SSAT,USAT,
+    % Reverse
+    RBIT,REV,REV16,REVSH,
+    % Bit field
+    BFC,BFI,
+    % Table branch
+    TBB,TBH
+  },
+  % Directives
+  morekeywords=[2]{%
+    .text,.data,.bss,.section,.global,.extern,
+    .equ,.set,.word,.hword,.byte,.space,.fill,
+    .align,.balign,.p2align,.org,.include,
+    .if,.else,.endif,.macro,.endm,.rept,.endr,
+    .thumb,.thumb_func,.cpu,.fpu,.syntax,
+    .code,.size,.type,.ident
+  },
+  % Registers
+  morekeywords=[3]{%
+    r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,
+    sp,lr,pc,psr,APSR,IPSR,EPSR,IEPSR,IAPSR,
+    EAPSR,PRIMASK,FAULTMASK,BASEPRI,CONTROL,
+    MSP,PSP,R14,R13,R15,
+    % FPU registers (Cortex-M4F/M7)
+    s0,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,
+    s13,s14,s15,s16,s31
+  },
+  % Conditions
+  morekeywords=[4]{%
+    EQ,NE,CS,HS,CC,LO,MI,PL,VS,VC,HI,LS,GE,LT,
+    GT,LE,AL
+  },
+  % Pseudo-instructions
+  morekeywords=[5]{%
+    ADR,ADRL,LDR,ASR,LSL,LSR,ROR,RRX
+  },
+  % Cortex-M specific
+  morekeywords=[6]{%
+    __disable_irq,__enable_irq,__get_PSP,
+    __set_PSP,__get_MSP,__set_MSP,__NOP,
+    __WFI,__WFE,__SEV,__ISB,__DSB,__DMB,
+    __CLREX,__LDREXW,__STREXW
+  },
+  sensitive=true,
+  morecomment=[l]{;},           % Line comments
+  morecomment=[s]{/*}{*/},      % Block comments
+  morestring=[b]",              % Strings
+  morestring=[b]'               % Characters
+}
+
+% Main style for STM32 assembly
+\lstdefinestyle{STM32Style}{
+  language=STM32Assembly,
+  backgroundcolor=\color{armbackground},
+  basicstyle=\ttfamily\footnotesize,
+  commentstyle=\color{armcomment}\itshape,
+  keywordstyle=[1]\color{armblue}\bfseries,
+  keywordstyle=[2]\color{armpurple}\bfseries,
+  keywordstyle=[3]\color{armred},
+  keywordstyle=[4]\color{armgreen},
+  keywordstyle=[5]\color{orange},
+  keywordstyle=[6]\color{violet},
+  stringstyle=\color{armred},
+  numberstyle=\tiny\color{armgray},
+  numbers=left,
+  numbersep=10pt,
+  stepnumber=1,
+  numberfirstline=true,
+  framesep=5pt,
+  framerule=0.8pt,
+  rulecolor=\color{armframecolor},
+  frame=tb,  % top and bottom
+  captionpos=b,
+  breaklines=true,
+  breakatwhitespace=true,
+  prebreak=\mbox{\textcolor{red}{$\hookleftarrow$}},
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}},
+  showstringspaces=false,
+  tabsize=4,
+  upquote=true
+}
+
+% Inline assembly style
+\lstdefinestyle{STM32Inline}{
+  language=STM32Assembly,
+  basicstyle=\ttfamily\small,
+  keywordstyle=[1]\color{armblue},
+  commentstyle=\color{armcomment}\itshape,
+  numbers=none,
+  frame=none,
+  backgroundcolor=\color{white}
+}
+
+% For code within C context (asm volatile)
+\lstdefinelanguage{STM32CWithAsm}{
+  language=C,
+  morekeywords=[1]{asm,__asm__,volatile},
+  moredelim=[is][\color{armblue}]{@}{@},
+}
+
+\lstdefinestyle{STM32EmbeddedAsm}{
+  language=STM32CWithAsm,
+  backgroundcolor=\color{armbackground},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{armblue}\bfseries,
+  commentstyle=\color{armcomment}\itshape,
+  moredelim=[is][\lstset{style=STM32Inline}]{\%asm\%}{\%end\%},
+  numbers=left,
+  frame=single
+}
+
+\lstdefinestyle{MakefileStyle}{
+  language=make,
+  backgroundcolor=\color{armbackground},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{armblue}\bfseries,
+  commentstyle=\color{armcomment}\itshape,
+  stringstyle=\color{armgreen},
+  identifierstyle=\color{black},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=5pt,
+  frame=single,
+  tabsize=4,
+  showstringspaces=false,
+  breaklines=true,
+  morekeywords={all, clean, flash, openocd, debug, .PHONY},
+  morecomment=[l]{\#},
+  sensitive=true
+}
+
+
+% Set as default for assembly
+\lstset{style=STM32Style}
+
+% Custom commands
+\newcommand{\stmasm}[1]{\lstinline[style=STM32Inline]{#1}}
+\newcommand{\asmreg}[1]{\textcolor{armred}{\texttt{#1}}}
+\newcommand{\asminst}[1]{\textcolor{armblue}{\textbf{\texttt{#1}}}}
+\newcommand{\asmdirective}[1]{\textcolor{armpurple}{\textbf{\texttt{#1}}}}
+
+% For including assembly files
+\newcommand{\includeasm}[2][]{%
+  \lstinputlisting[style=STM32Style,#1]{#2}%
+}
+
+% Create a new environment
+\lstnewenvironment{stm32asm}[1][]
+  {\lstset{style=STM32Style,#1}}
+  {}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "Linux Libertine"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts true
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command makeindex
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_title "Bit-Banding GPIO HAL on STM32"
+\pdf_author "Ashok Ashwin"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref section
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+
+\begin_body
+
+\begin_layout Title
+Bit-Banding GPIO HAL on STM32
+\end_layout
+
+\begin_layout Author
+Ashok Ashwin
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+What is Bit-Banding?
+\end_layout
+
+\begin_layout Standard
+ARM Cortex-M3 processors provide a hardware feature called bit-banding that allows atomic,
+ single-instruction access to individual bits in memory.
+ Instead of the conventional read-modify-write pattern required to manipulate a single bit in a register,
+ bit-banding maps each bit in a 1 MB region to a full 32-bit word in a 32 MB alias region.
+ Writing to the alias word sets or clears exactly one bit in the original register — no masking,
+ no shifting,
+ no race conditions.
+\end_layout
+
+\begin_layout Standard
+This project demonstrates bit-banding by building a small GPIO HAL for the STM32F103C8T6 (Blue Pill).
+ The HAL uses bit-band alias addresses to enable clocks,
+ set pins,
+ clear pins,
+ and toggle pins without read-modify-write sequences.
+\end_layout
+
+\begin_layout Section
+The Bit-Band Memory Model
+\end_layout
+
+\begin_layout Standard
+The Cortex-M3 defines two bit-band regions:
+\end_layout
+
+\begin_layout Itemize
+Peripheral bit-band region: 0x40000000 – 0x400FFFFF (1 MB)
+\end_layout
+
+\begin_layout Itemize
+Peripheral bit-band alias: 0x42000000 – 0x43FFFFFF (32 MB)
+\end_layout
+
+\begin_layout Itemize
+SRAM bit-band region: 0x20000000 – 0x200FFFFF (1 MB)
+\end_layout
+
+\begin_layout Itemize
+SRAM bit-band alias: 0x22000000 – 0x23FFFFFF (32 MB)
+\end_layout
+
+\begin_layout Standard
+Every bit in the 1 MB region is mapped to a word in the 32 MB alias region.
+ Since 1 MB = 8 million bits and each alias word is 4 bytes,
+ the alias region occupies 32 MB.
+\end_layout
+
+\begin_layout Subsection
+The Alias Address Formula
+\end_layout
+
+\begin_layout Standard
+For a peripheral register at address 
+\begin_inset Formula $A$
+\end_inset
+
+ and bit number 
+\begin_inset Formula $n$
+\end_inset
+
+ (0–31):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+$$\text{alias\_addr} = 0\text{x}42000000 + (A - 0\text{x}40000000) \times 32 + n \times 4$$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The multiplication by 32 converts byte offset to bit offset (8 bits per byte × 4 bytes per alias word),
+ and the multiplication by 4 selects the correct word within that byte's 8 alias words.
+\end_layout
+
+\begin_layout Subsection
+Why Bit-Banding Matters
+\end_layout
+
+\begin_layout Standard
+Consider enabling the GPIOC clock.
+ The traditional approach uses a read-modify-write pattern:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+// Traditional read-modify-write: 3 bus transactions
+\end_layout
+
+\begin_layout Plain Layout
+
+RCC_APB2ENR |= (1 << 4);   // READ register, OR with mask, WRITE back
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This compiles to a load,
+ an OR,
+ and a store — three bus transactions.
+ If an interrupt fires between the load and the store,
+ it could modify the same register,
+ and the write-back would overwrite that change.
+\end_layout
+
+\begin_layout Standard
+With bit-banding:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+// Bit-band: 1 bus transaction, atomic
+\end_layout
+
+\begin_layout Plain Layout
+
+BITBAND_PERIPH(RCC_APB2ENR_ADDR, 4) = 1;  // Single STORE to alias
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is a single store instruction.
+ The bus hardware translates it into an atomic bit-set on the actual register.
+ No read,
+ no mask,
+ no race.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Key advantages:
+\end_layout
+
+\begin_layout Itemize
+Atomic: A single store cannot be interrupted mid-operation
+\end_layout
+
+\begin_layout Itemize
+No masking: No shift or OR/AND operations needed in software
+\end_layout
+
+\begin_layout Itemize
+Interrupt-safe: No window for data corruption between read and write
+\end_layout
+
+\begin_layout Itemize
+Smaller code: One instruction instead of three
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+The GPIO Bit-Band HAL
+\end_layout
+
+\begin_layout Section
+Project Structure
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+item 
+\backslash
+quad gpio
+\backslash
+_bitband.h
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+item 
+\backslash
+quad main.c
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+item 
+\backslash
+quad startup.s
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+item 
+\backslash
+quad linker.inv
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+item 
+\backslash
+quad Makefile
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The HAL is implemented as a single header file (gpio_bitband.h) with static inline functions.
+ This ensures zero call overhead — the compiler inlines every function,
+ producing the same machine code as hand-written register access.
+\end_layout
+
+\begin_layout Section
+The Core Bit-Band Macro
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+#define PERIPH_BASE        0x40000000U
+\end_layout
+
+\begin_layout Plain Layout
+
+#define PERIPH_BB_BASE     0x42000000U
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#define BITBAND_PERIPH(reg_addr, bit) \
+\end_layout
+
+\begin_layout Plain Layout
+
+    (*(volatile unsigned int *)(PERIPH_BB_BASE + \
+\end_layout
+
+\begin_layout Plain Layout
+
+        (((unsigned int)(reg_addr) - PERIPH_BASE) * 32U) + \
+\end_layout
+
+\begin_layout Plain Layout
+
+        ((bit) * 4U)))
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This macro takes a peripheral register address and a bit number,
+ then computes the 32-bit alias address.
+ The result is a volatile dereference,
+ so it can be used on both sides of an assignment:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+BITBAND_PERIPH(addr, bit) = 1;   // Set bit
+\end_layout
+
+\begin_layout Plain Layout
+
+BITBAND_PERIPH(addr, bit) = 0;   // Clear bit
+\end_layout
+
+\begin_layout Plain Layout
+
+x = BITBAND_PERIPH(addr, bit);   // Read bit (returns 0 or 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Clock Enable via Bit-Banding
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+#define RCC_APB2ENR_ADDR   (RCC_BASE + 0x18U)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* RCC_APB2ENR bit positions */
+\end_layout
+
+\begin_layout Plain Layout
+
+#define RCC_IOPAEN_BIT     2U
+\end_layout
+
+\begin_layout Plain Layout
+
+#define RCC_IOPBEN_BIT     3U
+\end_layout
+
+\begin_layout Plain Layout
+
+#define RCC_IOPCEN_BIT     4U
+\end_layout
+
+\begin_layout Plain Layout
+
+#define RCC_IOPDEN_BIT     5U
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+static inline void gpio_clock_enable(gpio_port_t port) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    BITBAND_PERIPH(RCC_APB2ENR_ADDR, _gpio_rcc_bit(port)) = 1U;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For GPIOC (bit 4 in RCC_APB2ENR at 0x40021018):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+$$\text{alias} = 0\text{x}42000000 + (0\text{x}40021018 - 0\text{x}40000000) \times 32 + 4 \times 4$$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+$$= 0\text{x}42000000 + 0\text{x}21018 \times 32 + 16$$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+$$= 0\text{x}42000000 + 0\text{x}420300 + 0\text{x}10$$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+$$= 0\text{x}42420310$$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Writing 1 to address 0x42420310 atomically sets bit 4 in RCC_APB2ENR,
+ enabling the GPIOC clock.
+\end_layout
+
+\begin_layout Section
+Pin Configuration
+\end_layout
+
+\begin_layout Standard
+Pin configuration involves a 4-bit field (MODE[1:0] + CNF[1:0]) and cannot be done with a single bit-band write.
+ This function uses the traditional read-modify-write pattern:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+static inline void gpio_pin_config(gpio_port_t port, unsigned int pin,
+\end_layout
+
+\begin_layout Plain Layout
+
+                                   gpio_mode_t mode, gpio_cnf_t cnf) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    unsigned int base = _gpio_base(port);
+\end_layout
+
+\begin_layout Plain Layout
+
+    unsigned int offset = (pin < 8U) ? GPIO_CRL_OFF : GPIO_CRH_OFF;
+\end_layout
+
+\begin_layout Plain Layout
+
+    unsigned int pos = (pin % 8U) * 4U;
+\end_layout
+
+\begin_layout Plain Layout
+
+    volatile unsigned int *cr = (volatile unsigned int *)(base + offset);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    *cr &= ~(0xFU << pos);
+\end_layout
+
+\begin_layout Plain Layout
+
+    *cr |= (((unsigned int)cnf << 2U) | (unsigned int)mode) << pos;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is a deliberate design choice:
+ bit-banding is used where it provides a real benefit (single-bit operations),
+ while multi-bit fields still require the mask-and-set approach.
+\end_layout
+
+\begin_layout Section
+Pin Set,
+ Clear,
+ Toggle,
+ and Read
+\end_layout
+
+\begin_layout Standard
+These operations target single bits in ODR or IDR,
+ making them ideal for bit-banding:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+/* Set pin HIGH: write 1 to ODR bit alias */
+\end_layout
+
+\begin_layout Plain Layout
+
+static inline void gpio_pin_set(gpio_port_t port, unsigned int pin) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    BITBAND_PERIPH(_gpio_base(port) + GPIO_ODR_OFF, pin) = 1U;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* Clear pin LOW: write 0 to ODR bit alias */
+\end_layout
+
+\begin_layout Plain Layout
+
+static inline void gpio_pin_clear(gpio_port_t port, unsigned int pin) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    BITBAND_PERIPH(_gpio_base(port) + GPIO_ODR_OFF, pin) = 0U;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* Toggle: read ODR bit via alias, XOR, write back */
+\end_layout
+
+\begin_layout Plain Layout
+
+static inline void gpio_pin_toggle(gpio_port_t port, unsigned int pin) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    volatile unsigned int *alias =
+\end_layout
+
+\begin_layout Plain Layout
+
+        (volatile unsigned int *)(PERIPH_BB_BASE +
+\end_layout
+
+\begin_layout Plain Layout
+
+            ((_gpio_base(port) + GPIO_ODR_OFF - PERIPH_BASE) * 32U) +
+\end_layout
+
+\begin_layout Plain Layout
+
+            (pin * 4U));
+\end_layout
+
+\begin_layout Plain Layout
+
+    *alias ^= 1U;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+/* Read pin: returns 0 or 1 from IDR bit alias */
+\end_layout
+
+\begin_layout Plain Layout
+
+static inline unsigned int gpio_pin_read(gpio_port_t port, unsigned int pin) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return BITBAND_PERIPH(_gpio_base(port) + GPIO_IDR_OFF, pin);
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that gpio_pin_toggle still requires a read-XOR-write on the alias word,
+ but this operates on a single word containing only 0 or 1,
+ which is simpler than masking a 32-bit register.
+ For truly atomic set/clear without any read,
+ use gpio_pin_set and gpio_pin_clear directly.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Application: Blinking PC13
+\end_layout
+
+\begin_layout Section
+The main.c Source
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "default"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=C"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+/* main.c */
+\end_layout
+
+\begin_layout Plain Layout
+
+#include "gpio_bitband.h"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+int main(void) {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Enable GPIOC clock via bit-banding (atomic)
+\end_layout
+
+\begin_layout Plain Layout
+
+    gpio_clock_enable(GPIO_PORT_C);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Configure PC13 as push-pull output, 50 MHz
+\end_layout
+
+\begin_layout Plain Layout
+
+    gpio_pin_config(GPIO_PORT_C, 13, GPIO_MODE_OUTPUT_50MHZ, GPIO_CNF_OUTPUT_PP);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    // Blink loop using bit-band toggle
+\end_layout
+
+\begin_layout Plain Layout
+
+    while (1) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        gpio_pin_toggle(GPIO_PORT_C, 13);
+\end_layout
+
+\begin_layout Plain Layout
+
+        for (volatile int i = 0; i < 100000; i++);
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    return 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Compare this with the original register-level version:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+/* Original: raw register access */
+\end_layout
+
+\begin_layout Plain Layout
+
+#define RCC_APB2ENR   (*(volatile unsigned int *)0x40021018)
+\end_layout
+
+\begin_layout Plain Layout
+
+#define GPIOC_CRH     (*(volatile unsigned int *)0x40011004)
+\end_layout
+
+\begin_layout Plain Layout
+
+#define GPIOC_ODR     (*(volatile unsigned int *)0x4001100C)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+int main(void) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    RCC_APB2ENR |= (1 << 4);
+\end_layout
+
+\begin_layout Plain Layout
+
+    GPIOC_CRH &= ~(0xF << 20);
+\end_layout
+
+\begin_layout Plain Layout
+
+    GPIOC_CRH |= (0x3 << 20);
+\end_layout
+
+\begin_layout Plain Layout
+
+    while(1) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        GPIOC_ODR ^= (1 << 13);
+\end_layout
+
+\begin_layout Plain Layout
+
+        for(volatile int i = 0; i < 100000; i++);
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    return 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The HAL version is more readable,
+ port-independent,
+ and the clock enable is genuinely atomic thanks to bit-banding.
+\end_layout
+
+\begin_layout Section
+Startup and Linker
+\end_layout
+
+\begin_layout Standard
+The startup file and linker script are unchanged from the base project.
+ The startup initializes the stack pointer and calls main():
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "default"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=STM32Assembly,caption={startup.s}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+.syntax unified
+\end_layout
+
+\begin_layout Plain Layout
+
+.cpu cortex-m3
+\end_layout
+
+\begin_layout Plain Layout
+
+.fpu softvfp
+\end_layout
+
+\begin_layout Plain Layout
+
+.thumb
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+.global vtable
+\end_layout
+
+\begin_layout Plain Layout
+
+.global reset_handler
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+.section .isr_vector
+\end_layout
+
+\begin_layout Plain Layout
+
+.align 2
+\end_layout
+
+\begin_layout Plain Layout
+
+vtable:
+\end_layout
+
+\begin_layout Plain Layout
+
+    .word _estack
+\end_layout
+
+\begin_layout Plain Layout
+
+    .word reset_handler + 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+.section .text
+\end_layout
+
+\begin_layout Plain Layout
+
+.align 2
+\end_layout
+
+\begin_layout Plain Layout
+
+reset_handler:
+\end_layout
+
+\begin_layout Plain Layout
+
+    ldr r0, =_estack
+\end_layout
+
+\begin_layout Plain Layout
+
+    mov sp, r0
+\end_layout
+
+\begin_layout Plain Layout
+
+    bl main
+\end_layout
+
+\begin_layout Plain Layout
+
+    b .
+\end_layout
+
+\begin_layout Plain Layout
+
+    .ltorg
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The linker script defines Flash and RAM regions and computes the stack top:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "default"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+MEMORY
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+    FLASH ( rx )      : ORIGIN = 0x08000000, LENGTH = 64K
+\end_layout
+
+\begin_layout Plain Layout
+
+    RAM ( rxw )       : ORIGIN = 0x20000000, LENGTH = 20K
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+_estack = ORIGIN(RAM) + LENGTH(RAM);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+SECTIONS
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+    .text : { *(.isr_vector) *(.text) *(.text*) *(.rodata) *(.rodata*) } > FLASH
+\end_layout
+
+\begin_layout Plain Layout
+
+    .data : { *(.data) *(.data*) } > RAM AT> FLASH
+\end_layout
+
+\begin_layout Plain Layout
+
+    .bss  : { *(.bss) *(.bss*) *(COMMON) } > RAM
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Makefile
+\end_layout
+
+\begin_layout Standard
+The HAL is header-only,
+ so the Makefile requires no additional source files:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "default"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "style=MakefileStyle"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# Toolchain
+\end_layout
+
+\begin_layout Plain Layout
+
+CC = arm-none-eabi-gcc
+\end_layout
+
+\begin_layout Plain Layout
+
+OBJCOPY = arm-none-eabi-objcopy
+\end_layout
+
+\begin_layout Plain Layout
+
+SIZE = arm-none-eabi-size
+\end_layout
+
+\begin_layout Plain Layout
+
+GDB = arm-none-eabi-gdb
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+TARGET = program
+\end_layout
+
+\begin_layout Plain Layout
+
+ASM_SOURCES = startup.s
+\end_layout
+
+\begin_layout Plain Layout
+
+C_SOURCES = main.c
+\end_layout
+
+\begin_layout Plain Layout
+
+OBJECTS = $(ASM_SOURCES:.s=.o) $(C_SOURCES:.c=.o)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+CFLAGS = -Og -g3 -mthumb -mcpu=cortex-m3 -Wall --specs=nosys.specs -nostdlib
+\end_layout
+
+\begin_layout Plain Layout
+
+LDFLAGS = -T linker.inv -Wl,-Map=$(TARGET).map
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+all: $(TARGET).elf $(TARGET).bin
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%.o: %.c
+\end_layout
+
+\begin_layout Plain Layout
+
+	$(CC) $(CFLAGS) -c $< -o $@
+\end_layout
+
+\begin_layout Plain Layout
+
+%.o: %.s
+\end_layout
+
+\begin_layout Plain Layout
+
+	$(CC) $(CFLAGS) -c $< -o $@
+\end_layout
+
+\begin_layout Plain Layout
+
+$(TARGET).elf: $(OBJECTS)
+\end_layout
+
+\begin_layout Plain Layout
+
+	$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $@
+\end_layout
+
+\begin_layout Plain Layout
+
+	$(SIZE) $@
+\end_layout
+
+\begin_layout Plain Layout
+
+$(TARGET).bin: $(TARGET).elf
+\end_layout
+
+\begin_layout Plain Layout
+
+	$(OBJCOPY) -O binary $< $@
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+flash: $(TARGET).elf
+\end_layout
+
+\begin_layout Plain Layout
+
+	openocd -c "set CPUTAPID 0x1ba01477" -f interface/stlink.cfg -f target/stm32f1x.cfg \
+\end_layout
+
+\begin_layout Plain Layout
+
+		-c "program $(TARGET).elf verify reset exit"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+clean:
+\end_layout
+
+\begin_layout Plain Layout
+
+	rm -f $(TARGET).elf $(TARGET).bin $(TARGET).map $(OBJECTS)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+.PHONY: all flash clean
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Bit-Banding in Depth
+\end_layout
+
+\begin_layout Section
+Traditional Register Access vs Bit-Banding
+\end_layout
+
+\begin_layout Standard
+To understand the concrete improvement,
+ consider what happens at the instruction level when setting a single GPIO pin.
+\end_layout
+
+\begin_layout Subsection
+Traditional: Read-Modify-Write on ODR
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+// C code
+\end_layout
+
+\begin_layout Plain Layout
+
+GPIOC_ODR |= (1 << 13);
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Compiles to approximately:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=STM32Assembly]
+\end_layout
+
+\begin_layout Plain Layout
+
+    ldr  r0, =0x4001100C     ; Load ODR address
+\end_layout
+
+\begin_layout Plain Layout
+
+    ldr  r1, [r0]            ; READ current ODR value
+\end_layout
+
+\begin_layout Plain Layout
+
+    orr  r1, r1, #(1 << 13) ; MODIFY: set bit 13
+\end_layout
+
+\begin_layout Plain Layout
+
+    str  r1, [r0]            ; WRITE back
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Four instructions,
+ two bus transactions (load + store).
+ An interrupt between the ldr and str could corrupt the register.
+\end_layout
+
+\begin_layout Subsection
+Bit-Band: Single Store
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=C]
+\end_layout
+
+\begin_layout Plain Layout
+
+// C code
+\end_layout
+
+\begin_layout Plain Layout
+
+BITBAND_PERIPH(0x4001100C, 13) = 1;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Compiles to approximately:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=STM32Assembly]
+\end_layout
+
+\begin_layout Plain Layout
+
+    ldr  r0, =0x42220034     ; Load alias address for ODR bit 13
+\end_layout
+
+\begin_layout Plain Layout
+
+    movs r1, #1              ; Value to write
+\end_layout
+
+\begin_layout Plain Layout
+
+    str  r1, [r0]            ; Single STORE - hardware sets bit 13
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Three instructions,
+ one bus write.
+ The store is atomic — no interrupt can interfere.
+\end_layout
+
+\begin_layout Section
+When to Use Bit-Banding
+\end_layout
+
+\begin_layout Itemize
+Single-bit operations on peripheral registers (clock enable,
+ pin set/clear,
+ flag checks)
+\end_layout
+
+\begin_layout Itemize
+Interrupt-safe bit manipulation without disabling interrupts
+\end_layout
+
+\begin_layout Itemize
+SRAM flags shared between main code and ISR handlers
+\end_layout
+
+\begin_layout Itemize
+Any scenario where read-modify-write races are a concern
+\end_layout
+
+\begin_layout Section
+Limitations
+\end_layout
+
+\begin_layout Itemize
+Only available on Cortex-M3 and Cortex-M4 (not M0,
+ not M7 in most implementations)
+\end_layout
+
+\begin_layout Itemize
+Only the first 1 MB of each region is bit-addressable
+\end_layout
+
+\begin_layout Itemize
+Multi-bit fields (like GPIO mode configuration) still require read-modify-write
+\end_layout
+
+\begin_layout Itemize
+The alias region consumes 32 MB of address space (no physical memory cost)
+\end_layout
+
+\begin_layout Itemize
+Toggle still needs a read-XOR-write on the alias word
+\end_layout
+
+\end_body
+\end_document
